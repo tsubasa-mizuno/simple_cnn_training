@@ -1,12 +1,12 @@
 from torchvision import transforms
-from torchvision.datasets import CIFAR10
+from torchvision.datasets import CIFAR10, CelebA
 from torch.utils.data import DataLoader
 
 
 def transform_factory(args, do_crop=True):
     if do_crop:
         transform = transforms.Compose([
-            transforms.RandomResizedCrop(224),
+            transforms.RandomResizedCrop(args.img_size),
             transforms.RandomHorizontalFlip(),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406],
@@ -14,7 +14,7 @@ def transform_factory(args, do_crop=True):
         ])
     else:
         transform = transforms.Compose([
-            transforms.Resize(224),
+            transforms.Resize(args.img_size),
             transforms.ToTensor(),
             transforms.Normalize([0.5, 0.5, 0.5],
                                  [0.5, 0.5, 0.5])
@@ -45,6 +45,18 @@ def dataset_facory(args):
                           download=True,
                           transform=transform)
         n_classes = 10
+    elif args.dataset_name == "CelebA":
+        train_set = CelebA(root=args.root,
+                           split='train',
+                           target_type=None,  # for GAN example
+                           download=True,
+                           transform=transform)
+        val_set = CelebA(root=args.root,
+                         split='valid',
+                         target_type=None,
+                         download=True,
+                         transform=transform)
+        n_classes = None
     else:
         raise ValueError("invalid args.dataset_name")
 
