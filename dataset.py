@@ -48,12 +48,12 @@ def dataset_facory(args):
     elif args.dataset_name == "CelebA":
         train_set = CelebA(root=args.root,
                            split='train',
-                           target_type=None,  # for GAN example
+                           target_type='attr',
                            download=True,
                            transform=transform)
         val_set = CelebA(root=args.root,
                          split='valid',
-                         target_type=None,
+                         target_type='attr',
                          download=True,
                          transform=transform)
         n_classes = None

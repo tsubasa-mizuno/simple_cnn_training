@@ -13,16 +13,16 @@ def get_args():
     # dataset
     parser.add_argument('-r', '--root', type=str, default='./data',
                         help='root of dataset. default to ./data')
-    parser.add_argument('-d', '--dataset_name', type=str, default='CIFAR10',
-                        help='name of dataset. default to CIFAR10')
-    parser.add_argument('-s', '--img_size', type=int, default=224,
-                        help='image size. default to 224')
+    parser.add_argument('-d', '--dataset_name', type=str, default='CelebA',
+                        help='name of dataset. default to CelebA')
+    parser.add_argument('-s', '--img_size', type=int, default=64,
+                        help='image size. default to 64')
     # model
     parser.add_argument('--torch_home', type=str, default='./models',
                         help='TORCH_HOME where pre-trained models are stored.'
                         ' default to ./models')
-    parser.add_argument('-m', '--model', type=str, default='resnet18',
-                        help='CNN model. default to resnet18')
+    parser.add_argument('-m', '--model', type=str, default='DCGAN',
+                        help='CNN model. default to DCGAN')
     parser.add_argument('--pretrain', dest='pretrain', action='store_true',
                         help='use pretrained model')
     parser.add_argument('--no_pretrain', dest='pretrain', action='store_false',

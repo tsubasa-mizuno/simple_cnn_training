@@ -49,9 +49,6 @@ class Generator(nn.Module):
             # state size. (nc) x 64 x 64
         )
 
-    def weights_init(self):
-        self.apply(weights_init)
-
     def forward(self, input):
         return self.main(input)
 

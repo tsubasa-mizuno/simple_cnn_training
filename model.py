@@ -3,7 +3,7 @@ import os
 import torch.nn as nn
 from torchvision.models import resnet18
 
-from model_dcgan import Generator, Discriminator
+from model_dcgan import Generator, Discriminator, weights_init
 
 
 def model_factory(args, n_classes):
@@ -19,7 +19,10 @@ def model_factory(args, n_classes):
         model.fc = nn.Linear(num_ftrs, n_classes)
 
     elif args.model == 'DCGAN':
-        model = (Generator(), Discriminator())
+        models = (Generator(), Discriminator())
+        for model in models:
+            model.apply(weights_init)
+        model = models
 
     else:
         raise ValueError("invalid args.model")
