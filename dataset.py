@@ -3,7 +3,7 @@ from torchvision.datasets import CIFAR10, CelebA
 from torch.utils.data import DataLoader
 
 
-def transform_factory(args, do_crop=True):
+def transform_factory(args, do_crop=False):
     if do_crop:
         transform = transforms.Compose([
             transforms.RandomResizedCrop(args.img_size),

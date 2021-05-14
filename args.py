@@ -41,13 +41,13 @@ def get_args():
     # optimizer
     parser.add_argument('--optimizer', type=str, default='SGD',
                         help='optimizer. SGD or Adam. default to SGD')
-    parser.add_argument('-lr', type=float, default=0.0001,
-                        help='learning rate. default to 0.0001')
+    parser.add_argument('-lr', type=float, default=0.0002,
+                        help='learning rate. default to 0.0002')
     parser.add_argument('--momentum', type=float, default=0.9,
                         help='momentum of SGD. default to 0.9')
-    parser.add_argument('--betas', nargs='+', type=float, default=[0.9, 0.999],
-                        help='betas of Adam. default to (0.9, 0.999).'
-                        'specify like --betas 0.9 0.999')
+    parser.add_argument('--betas', nargs='+', type=float, default=[0.5, 0.999],
+                        help='betas of Adam. default to (0.5, 0.999).'
+                        'specify like --betas 0.5 0.999')
     parser.add_argument('--use_scheduler', dest='use_scheduler',
                         action='store_true',
                         help='use scheduler')
