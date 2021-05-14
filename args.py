@@ -15,6 +15,8 @@ def get_args():
                         help='root of dataset. default to ./data')
     parser.add_argument('-d', '--dataset_name', type=str, default='CIFAR10',
                         help='name of dataset. default to CIFAR10')
+    parser.add_argument('-s', '--img_size', type=int, default=224,
+                        help='image size. default to 224')
     # model
     parser.add_argument('--torch_home', type=str, default='./models',
                         help='TORCH_HOME where pre-trained models are stored.'
