@@ -1,6 +1,10 @@
 from torchvision import transforms
-from torchvision.datasets import CIFAR10
+from torchvision.datasets import CIFAR10, UCF101
 from torch.utils.data import DataLoader
+import torch
+import torch.nn as nn
+import pickle
+from torch.utils.data.dataloader import default_collate
 
 
 def transform_factory(args, do_crop=True):
@@ -45,6 +49,54 @@ def dataset_facory(args):
                           download=True,
                           transform=transform)
         n_classes = 10
+        custom_collate = None
+
+    elif args.dataset_name == "UCF101":
+
+        # https://www.kaggle.com/pevogam/starter-ucf101-with-pytorch
+        transform = transforms.Compose([
+            # scale in [0, 1] of type float
+            transforms.Lambda(lambda x: x / 255.),
+            # reshape into (T, C, H, W) for easier convolutions
+            transforms.Lambda(lambda x: x.permute(0, 3, 1, 2)),
+            # rescale to the most common size
+            transforms.Lambda(
+                lambda x: nn.functional.interpolate(x, (240, 320))),
+        ])
+
+        def remove_audio_collate(batch):
+            # https://www.kaggle.com/pevogam/starter-ucf101-with-pytorch
+            '''
+            remove audio channel because
+            not all of UCF101 vidoes have audio channel
+            '''
+            video_only_batch = []
+            for video, audio, label in batch:
+                video_only_batch.append((video, label))
+            return default_collate(video_only_batch)
+
+        custom_collate = remove_audio_collate
+
+        with open('/dataset/UCF101metadata_fpc1_sbc1.pickle', 'rb') as f:
+            metadata = pickle.load(f)
+
+        train_set = UCF101(root='/dataset/UCF-101/',
+                           annotation_path='/dataset/ucfTrainTestlist/',
+                           frames_per_clip=1,
+                           step_between_clips=1,
+                           fold=1,
+                           train=True,
+                           transform=transform,
+                           _precomputed_metadata=metadata)
+        val_set = UCF101(root='/dataset/UCF-101/',
+                         annotation_path='/dataset/ucfTrainTestlist/',
+                         frames_per_clip=1,
+                         step_between_clips=1,
+                         fold=1,
+                         train=False,
+                         transform=transform,
+                         _precomputed_metadata=metadata)
+        n_classes = 101
     else:
         raise ValueError("invalid args.dataset_name")
 
@@ -52,11 +104,13 @@ def dataset_facory(args):
                               batch_size=args.batch_size,
                               shuffle=True,
                               drop_last=True,
+                              collate_fn=custom_collate,
                               num_workers=args.num_workers)
     val_loader = DataLoader(val_set,
                             batch_size=args.batch_size,
                             shuffle=False,
                             drop_last=True,
+                            collate_fn=custom_collate,
                             num_workers=args.num_workers)
 
     return train_loader, val_loader, n_classes
