@@ -1,10 +1,10 @@
 from torchvision import transforms
 from torchvision.datasets import CIFAR10, UCF101
 from torch.utils.data import DataLoader
-import torch
 import torch.nn as nn
 import pickle
 from torch.utils.data.dataloader import default_collate
+import os
 
 
 def transform_factory(args, do_crop=True):
@@ -77,21 +77,25 @@ def dataset_facory(args):
 
         custom_collate = remove_audio_collate
 
-        with open('/dataset/UCF101metadata_fpc1_sbc1.pickle', 'rb') as f:
+        metadata_filename = os.path.join(
+            args.metadata_path,
+            'UCF101metadata_fpc{}_sbc{}.pickle'.format(args.frames_per_clip,
+                                                       args.step_between_clips))
+        with open(metadata_filename, 'rb') as f:
             metadata = pickle.load(f)
 
-        train_set = UCF101(root='/dataset/UCF-101/',
-                           annotation_path='/dataset/ucfTrainTestlist/',
-                           frames_per_clip=1,
-                           step_between_clips=1,
+        train_set = UCF101(root=args.root,
+                           annotation_path=args.annotation_path,
+                           frames_per_clip=8,
+                           step_between_clips=8,
                            fold=1,
                            train=True,
                            transform=transform,
                            _precomputed_metadata=metadata)
-        val_set = UCF101(root='/dataset/UCF-101/',
-                         annotation_path='/dataset/ucfTrainTestlist/',
-                         frames_per_clip=1,
-                         step_between_clips=1,
+        val_set = UCF101(root=args.root,
+                         annotation_path=args.annotation_path,
+                         frames_per_clip=8,
+                         step_between_clips=8,
                          fold=1,
                          train=False,
                          transform=transform,

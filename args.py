@@ -15,6 +15,21 @@ def get_args():
                         help='root of dataset. default to ./data')
     parser.add_argument('-d', '--dataset_name', type=str, default='CIFAR10',
                         help='name of dataset. default to CIFAR10')
+    # dataset: specific to UCF101
+    parser.add_argument('--annotation_path', type=str,
+                        default='/dataset/ucfTrainTestlist/',
+                        help='path to the folder of annotation files.'
+                        'default to /dataset/ucfTrainTestlist')
+    parser.add_argument('--metadata_path', type=str,
+                        default='/dataset/',
+                        help='path to the folder in which the metadata file is stored.'
+                        'default to /dataset')
+    # for video dataset
+    parser.add_argument('--frames_per_clip', type=int, default=8,
+                        help='frames per clip. default to 8')
+    parser.add_argument('--step_between_clips', type=int, default=8,
+                        help='step between clips. default to 8')
+
     # model
     parser.add_argument('--torch_home', type=str, default='./models',
                         help='TORCH_HOME where pre-trained models are stored.'
