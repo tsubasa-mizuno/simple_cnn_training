@@ -2,6 +2,7 @@ import os
 
 import torch.nn as nn
 from torchvision.models import resnet18
+from pytorchvideo.models import x3d
 
 
 def model_factory(args, n_classes):
@@ -15,6 +16,9 @@ def model_factory(args, n_classes):
         model = resnet18(pretrained=args.pretrain)
         num_ftrs = model.fc.in_features
         model.fc = nn.Linear(num_ftrs, n_classes)
+    elif args.model == 'X3D':
+        model = x3d.create_x3d()
+
     else:
         raise ValueError("invalid args.model")
 
