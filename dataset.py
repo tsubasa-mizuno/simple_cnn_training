@@ -79,8 +79,21 @@ def dataset_facory(args):
 
         metadata_filename = os.path.join(
             args.metadata_path,
-            'UCF101metadata_fpc{}_sbc{}.pickle'.format(args.frames_per_clip,
-                                                       args.step_between_clips))
+            'UCF101metadata_fpc{}_sbc{}.pickle'.format(
+                args.frames_per_clip,
+                args.step_between_clips))
+
+        if not os.path.exists(metadata_filename):
+            # precompute and save metadata
+            dataset_dict = UCF101(root=args.root,
+                                  annotation_path=args.annotation_path,
+                                  frames_per_clip=args.frames_per_clip,
+                                  step_between_clips=args.step_between_clips,
+                                  num_workers=args.num_workers,
+                                  )
+            with open(metadata_filename, "wb") as f:
+                pickle.dump(dataset_dict.metadata, f)
+
         with open(metadata_filename, 'rb') as f:
             metadata = pickle.load(f)
 
