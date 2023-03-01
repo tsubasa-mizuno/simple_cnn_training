@@ -3,3 +3,7 @@ models/
 __pycache__/
 mlruns/
 .DS_Store
+log/
+comet_logs/
+downloaded_data/
+pretrained_models/
