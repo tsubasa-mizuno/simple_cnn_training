@@ -12,6 +12,8 @@ from utils import (
 )
 from model import ClassificationBaseModel, get_device
 
+# コメントの追加
+
 
 @dataclass
 class TrainConfig:
